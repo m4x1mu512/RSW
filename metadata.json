@@ -1,0 +1,6 @@
+{
+  "name": "RUSSIAN STREETWEAR CLUB",
+  "description": "Курируемый маркетплейс и агрегатор независимых российских стритвир брендов: HRDCR, ACOLYTE, MOLOTOV, YALTA 94, die young.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
