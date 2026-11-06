@@ -385,7 +385,7 @@ export const CatalogPage: React.FC = () => {
             {/* City Filter */}
             <div>
               <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-3">Город</h3>
-              <div className="space-y-2 pr-2">
+              <div className="space-y-2 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
                 {Array.from(new Set(BRANDS.map((brand) => brand.city))).map((city) => {
                   const isChecked = selectedCities.includes(city);
                   const count = PRODUCTS.filter((product) => BRANDS.some((brand) => brand.slug === product.brandSlug && brand.city === city)).length;
@@ -544,7 +544,7 @@ export const CatalogPage: React.FC = () => {
             {/* City */}
             <div>
               <h4 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-2">Город</h4>
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
                 {Array.from(new Set(BRANDS.map((brand) => brand.city))).map((city) => (
                   <label key={city} className="flex items-center gap-2 text-xs text-zinc-300 py-1">
                     <input type="checkbox" checked={selectedCities.includes(city)} onChange={() => toggleCity(city)} className="accent-cyan-400" />
