@@ -11,21 +11,23 @@ import { BrandsPage } from './pages/BrandsPage.tsx';
 import { BrandDetailPage } from './pages/BrandDetailPage.tsx';
 import { FavoritesPage } from './pages/FavoritesPage.tsx';
 
-// Scroll to top automatically when location changes
+// Scroll to top on route changes and handle in-app hash anchors safely.
 function ScrollToTop() {
-  const { pathname, search } = useLocation();
+  const { pathname, search, hash } = useLocation();
 
   useEffect(() => {
-    // If it's a hash anchor like #about, let default scroll handle or smoothly scroll
-    if (window.location.hash) {
-      const el = document.querySelector(window.location.hash);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+    if (hash) {
+      const targetId = decodeURIComponent(hash.slice(1));
+      const target = document.getElementById(targetId);
+
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         return;
       }
     }
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [pathname, search]);
+
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname, search, hash]);
 
   return null;
 }
