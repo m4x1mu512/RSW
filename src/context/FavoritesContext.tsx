@@ -17,9 +17,9 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : ['hrdcr-untamed-tee', 'acolyte-studio-hoodie'];
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return ['hrdcr-untamed-tee', 'acolyte-studio-hoodie'];
+      return [];
     }
   });
 
