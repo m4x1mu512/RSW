@@ -44,7 +44,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">
           {product.isNew ? (
             <span className="text-[11px] font-mono uppercase tracking-wider font-bold text-cyan-400 bg-zinc-950/80 backdrop-blur-md px-2 py-0.5 rounded border border-cyan-500/30">
-              NEW DROP
+              НОВИНКА
             </span>
           ) : (
             <span />
