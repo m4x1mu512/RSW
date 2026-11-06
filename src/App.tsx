@@ -13,7 +13,7 @@ import { FavoritesPage } from './pages/FavoritesPage.tsx';
 
 // Scroll to top on route changes and handle in-app hash anchors safely.
 function ScrollToTop() {
-  const { pathname, search, hash } = useLocation();
+  const { pathname, hash } = useLocation();
 
   useEffect(() => {
     if (hash) {
@@ -27,7 +27,7 @@ function ScrollToTop() {
     }
 
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [pathname, search, hash]);
+  }, [pathname, hash]);
 
   return null;
 }
