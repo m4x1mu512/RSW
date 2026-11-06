@@ -134,10 +134,10 @@ export const PRODUCTS: Product[] = [
     composition: '100% гребенной хлопок пенье (280 г/м²)',
     careInstructions: 'Стирка при 30°C на деликатном режиме наизнанку. Не сушить в барабане. Гладить с изнаночной стороны.',
     deliveryInfo: 'Доставка СДЭК до двери или пункта выдачи по всей России (2-4 дня). Самовывоз в Санкт-Петербурге. Бесплатный возврат 14 дней.',
-    imageUrl: '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg',
+    imageUrl: './images/oversize_tee.jpg',
     gallery: [
-      '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg',
-      '/src/assets/images/hero_streetwear_editorial_1793989864740.jpg'
+      './images/oversize_tee.jpg',
+      './images/hero_editorial.jpg'
     ],
     externalShopUrl: 'https://hrdcr.ru/products/untamed-tee',
     isNew: true,
@@ -158,10 +158,10 @@ export const PRODUCTS: Product[] = [
     composition: '85% хлопок, 15% полиэстер для сохранения геометрии капюшона (460 г/м²)',
     careInstructions: 'Бережная машинная стирка при температуре до 30°C. Избегать отжима выше 600 об/мин.',
     deliveryInfo: 'Курьерская доставка по Москве в день заказа или СДЭК Экспресс по России и СНГ.',
-    imageUrl: '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg',
+    imageUrl: './images/hoodie_black.jpg',
     gallery: [
-      '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg',
-      '/src/assets/images/hero_streetwear_editorial_1793989864740.jpg'
+      './images/hoodie_black.jpg',
+      './images/hero_editorial.jpg'
     ],
     externalShopUrl: 'https://acolyte.tech/shop/studio-silence-hoodie',
     isNew: true,
@@ -182,10 +182,10 @@ export const PRODUCTS: Product[] = [
     composition: '65% хлопок, 35% износостойкий нейлон Cordura с влагоотталкивающим покрытием',
     careInstructions: 'Ручная или деликатная стирка при 30°C. Не использовать кондиционер, чтобы не повредить DWR мембрану.',
     deliveryInfo: 'Отправка в течение 24 часов. Доставка по РФ курьером с возможностью примерки.',
-    imageUrl: '/src/assets/images/streetwear_cargo_pants_1793989866083.jpg',
+    imageUrl: './images/cargo_pants.jpg',
     gallery: [
-      '/src/assets/images/streetwear_cargo_pants_1793989866083.jpg',
-      '/src/assets/images/hero_streetwear_editorial_1793989864740.jpg'
+      './images/cargo_pants.jpg',
+      './images/hero_editorial.jpg'
     ],
     externalShopUrl: 'https://acolyte.tech/shop/tactical-modular-v2',
     isNew: false,
@@ -206,9 +206,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% органический хлопок (430 г/м²)',
     careInstructions: 'Стирать застегнутым наизнанку при 30°C. Гладить паром.',
     deliveryInfo: 'Экспресс СДЭК из Перми (2-3 дня до Москвы и Петербурга).',
-    imageUrl: '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg',
+    imageUrl: './images/hoodie_black.jpg',
     gallery: [
-      '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg'
+      './images/hoodie_black.jpg'
     ],
     externalShopUrl: 'https://molotov.ru/products/permafrost-zip',
     isNew: true,
@@ -229,9 +229,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% плотный вываренный хлопок (260 г/м²)',
     careInstructions: 'Стирать при 30°C жидким средством для темных вещей.',
     deliveryInfo: 'Доставка по РФ от 3 до 5 дней. Фирменный упаковочный зип-пакет с постером в подарок.',
-    imageUrl: '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg',
+    imageUrl: './images/oversize_tee.jpg',
     gallery: [
-      '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg'
+      './images/oversize_tee.jpg'
     ],
     externalShopUrl: 'https://yalta94.com/catalog/priboy-acid-tee',
     isNew: false,
@@ -252,9 +252,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% тяжелый хлопок без синтетических примесей',
     careInstructions: 'Сухая чистка или бережная ручная стирка в холодной воде.',
     deliveryInfo: 'Лимитированный тираж 150 единиц. Номерной сертификат в комплекте.',
-    imageUrl: '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg',
+    imageUrl: './images/hoodie_black.jpg',
     gallery: [
-      '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg'
+      './images/hoodie_black.jpg'
     ],
     externalShopUrl: 'https://dieyoung.store/item/mgla-deconstructed',
     isNew: true,
@@ -275,9 +275,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% компакт-пенье хлопок (240 г/м²)',
     careInstructions: 'Стирка при 30°C вывернутым наизнанку.',
     deliveryInfo: 'Доставка по РФ и СНГ. Флагманский магазин в Москве на Хлебозаводе.',
-    imageUrl: '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg',
+    imageUrl: './images/oversize_tee.jpg',
     gallery: [
-      '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg'
+      './images/oversize_tee.jpg'
     ],
     externalShopUrl: 'https://volchok.ru/catalog/longsleeve-oskolki',
     isNew: false,
@@ -298,9 +298,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% хлопковый саржевый твил',
     careInstructions: 'Машинная стирка при 40°C. Гладить при средней температуре.',
     deliveryInfo: 'Отправка СДЭК с трек-номером в день оформления.',
-    imageUrl: '/src/assets/images/streetwear_cargo_pants_1793989866083.jpg',
+    imageUrl: './images/cargo_pants.jpg',
     gallery: [
-      '/src/assets/images/streetwear_cargo_pants_1793989866083.jpg'
+      './images/cargo_pants.jpg'
     ],
     externalShopUrl: 'https://hrdcr.ru/products/baggy-drill-pants',
     isNew: true,
@@ -321,9 +321,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% нейлон Cordura 1000D, полиамидные стропы, фурнитура YKK',
     careInstructions: 'Чистить влажной губкой. Не стирать в стиральной машине.',
     deliveryInfo: 'Доставка по всей РФ 2-4 дня в фирменном чехле.',
-    imageUrl: '/src/assets/images/streetwear_cargo_pants_1793989866083.jpg',
+    imageUrl: './images/cargo_pants.jpg',
     gallery: [
-      '/src/assets/images/streetwear_cargo_pants_1793989866083.jpg'
+      './images/cargo_pants.jpg'
     ],
     externalShopUrl: 'https://acolyte.tech/shop/tactical-rig-01',
     isNew: false,
@@ -344,9 +344,9 @@ export const PRODUCTS: Product[] = [
     composition: '50% шерсть мериноса, 50% акрил Soft-Touch',
     careInstructions: 'Ручная стирка в прохладной воде со специальным средством для шерсти.',
     deliveryInfo: 'В наличии на складе. Отправка на следующий рабочий день.',
-    imageUrl: '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg',
+    imageUrl: './images/hoodie_black.jpg',
     gallery: [
-      '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg'
+      './images/hoodie_black.jpg'
     ],
     externalShopUrl: 'https://molotov.ru/catalog/balaclava-nordic',
     isNew: true,
@@ -367,9 +367,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% хлопок Selvedge Denim (14.5 oz)',
     careInstructions: 'Первые 6 месяцев не стирать для формирования естественных заломов (fade). Затем деликатная стирка в холодной воде.',
     deliveryInfo: 'Курьерская доставка по всей России с возможностью оплаты после примерки.',
-    imageUrl: '/src/assets/images/streetwear_cargo_pants_1793989866083.jpg',
+    imageUrl: './images/cargo_pants.jpg',
     gallery: [
-      '/src/assets/images/streetwear_cargo_pants_1793989866083.jpg'
+      './images/cargo_pants.jpg'
     ],
     externalShopUrl: 'https://dieyoung.store/item/raw-concrete-denim',
     isNew: false,
@@ -390,9 +390,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% нейлон с водоотталкивающим тефлоновым слоем',
     careInstructions: 'Протирать влажной тканью.',
     deliveryInfo: 'Отправка почтой или СДЭК из Крыма.',
-    imageUrl: '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg',
+    imageUrl: './images/oversize_tee.jpg',
     gallery: [
-      '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg'
+      './images/oversize_tee.jpg'
     ],
     externalShopUrl: 'https://yalta94.com/shop/panama-blackout',
     isNew: false,
@@ -413,9 +413,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% вычесанный хлопок (250 г/м²)',
     careInstructions: 'Стирка 30°C, гладить через ткань.',
     deliveryInfo: 'Доставка 1-3 дня в любой город РФ.',
-    imageUrl: '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg',
+    imageUrl: './images/oversize_tee.jpg',
     gallery: [
-      '/src/assets/images/streetwear_oversize_tee_1793989864945.jpg'
+      './images/oversize_tee.jpg'
     ],
     externalShopUrl: 'https://volchok.ru/catalog/tee-monolith',
     isNew: true,
@@ -436,9 +436,9 @@ export const PRODUCTS: Product[] = [
     composition: '100% хлопковый футер диагональ',
     careInstructions: 'Деликатная машинная стирка 30°C.',
     deliveryInfo: 'СДЭК или самовывоз в Санкт-Петербурге.',
-    imageUrl: '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg',
+    imageUrl: './images/hoodie_black.jpg',
     gallery: [
-      '/src/assets/images/streetwear_hoodie_black_1793989865029.jpg'
+      './images/hoodie_black.jpg'
     ],
     externalShopUrl: 'https://hrdcr.ru/products/crewneck-resistance',
     isNew: false,

@@ -83,7 +83,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenBrandModal }) => {
             <div className="lg:col-span-5 relative">
               <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/5] rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900 group">
                 <img
-                  src="/src/assets/images/hero_streetwear_editorial_1793989864740.jpg"
+                  src="./images/hero_editorial.jpg"
                   alt="Российский стритвир лукбук"
                   referrerPolicy="no-referrer"
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"

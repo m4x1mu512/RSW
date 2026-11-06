@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { FavoritesProvider } from './context/FavoritesContext.tsx';
 import { Navbar } from './components/Navbar.tsx';
 import { Footer } from './components/Footer.tsx';
@@ -35,7 +35,7 @@ export default function App() {
 
   return (
     <FavoritesProvider>
-      <BrowserRouter>
+      <HashRouter>
         <ScrollToTop />
         <div className="min-h-screen flex flex-col bg-[#09090b] text-[#f4f4f5]">
           <Navbar onOpenBrandModal={() => setIsBrandModalOpen(true)} />
@@ -70,7 +70,7 @@ export default function App() {
             onClose={() => setIsBrandModalOpen(false)}
           />
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </FavoritesProvider>
   );
 }
