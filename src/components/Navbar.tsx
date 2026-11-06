@@ -20,7 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBrandModal }) => {
   const navLinks = [
     { label: 'Каталог', path: '/catalog' },
     { label: 'Бренды', path: '/brands' },
-    { label: 'О клубе', path: '/#about' },
+    { label: 'О проекте', path: '/#about' },
   ];
 
   return (
@@ -121,7 +121,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBrandModal }) => {
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-sm font-medium text-zinc-300 hover:text-cyan-400"
           >
-            О клубе
+            О проекте
           </Link>
           <Link
             to="/favorites"
