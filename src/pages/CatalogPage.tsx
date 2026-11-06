@@ -23,6 +23,7 @@ export const CatalogPage: React.FC = () => {
   const sortParam = searchParams.get('sort') || 'default';
   const searchParam = searchParams.get('q') || '';
   const maxPriceParam = searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : 15000;
+  const cityParam = searchParams.get('city') || 'all';
 
   // Local state for UI
   const [searchQuery, setSearchQuery] = useState(searchParam);
@@ -32,6 +33,7 @@ export const CatalogPage: React.FC = () => {
   );
   const [selectedSize, setSelectedSize] = useState(sizeParam);
   const [maxPrice, setMaxPrice] = useState<number>(maxPriceParam);
+  const [selectedCities, setSelectedCities] = useState<string[]>(cityParam === 'all' ? [] : cityParam.split(','));
   const [sortBy, setSortBy] = useState(sortParam);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
@@ -43,8 +45,9 @@ export const CatalogPage: React.FC = () => {
     setSelectedSize(sizeParam);
     setSortBy(sortParam);
     setMaxPrice(maxPriceParam);
+    setSelectedCities(cityParam === 'all' ? [] : cityParam.split(','));
     setSearchQuery(searchParam);
-  }, [categoryParam, brandParam, sizeParam, sortParam, maxPriceParam, searchParam]);
+  }, [categoryParam, brandParam, sizeParam, sortParam, maxPriceParam, cityParam, searchParam]);
 
   const updateFilters = (newParams: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams);
@@ -86,6 +89,12 @@ export const CatalogPage: React.FC = () => {
     updateFilters({ maxPrice: price >= 15000 ? null : String(price) });
   };
 
+  const toggleCity = (city: string) => {
+    const next = selectedCities.includes(city) ? selectedCities.filter((item) => item !== city) : [...selectedCities, city];
+    setSelectedCities(next);
+    updateFilters({ city: next.length ? next.join(',') : null });
+  };
+
   const handleSortChange = (newSort: string) => {
     setSortBy(newSort);
     updateFilters({ sort: newSort === 'default' ? null : newSort });
@@ -101,6 +110,7 @@ export const CatalogPage: React.FC = () => {
     setSelectedBrands([]);
     setSelectedSize('all');
     setMaxPrice(15000);
+    setSelectedCities([]);
     setSortBy('default');
     setSearchQuery('');
     setSearchParams({});
@@ -126,6 +136,11 @@ export const CatalogPage: React.FC = () => {
       if (item.price > maxPrice) {
         return false;
       }
+      // City filter (each product inherits its brand's city)
+      if (selectedCities.length > 0) {
+        const productCity = BRANDS.find((brand) => brand.slug === item.brandSlug)?.city;
+        if (!productCity || !selectedCities.includes(productCity)) return false;
+      }
       // Search query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
@@ -144,7 +159,7 @@ export const CatalogPage: React.FC = () => {
       if (sortBy === 'newest') return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
       return 0; // default
     });
-  }, [selectedCategory, selectedBrands, selectedSize, maxPrice, searchQuery, sortBy]);
+  }, [selectedCategory, selectedBrands, selectedSize, maxPrice, selectedCities, searchQuery, sortBy]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProducts.length;
@@ -154,6 +169,7 @@ export const CatalogPage: React.FC = () => {
     selectedBrands.length +
     (selectedSize !== 'all' ? 1 : 0) +
     (maxPrice < 15000 ? 1 : 0) +
+    selectedCities.length +
     (searchQuery.trim() ? 1 : 0);
 
   return (
@@ -366,6 +382,26 @@ export const CatalogPage: React.FC = () => {
               </div>
             </div>
 
+            {/* City Filter */}
+            <div>
+              <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-3">Город</h3>
+              <div className="space-y-2 pr-2">
+                {Array.from(new Set(BRANDS.map((brand) => brand.city))).map((city) => {
+                  const isChecked = selectedCities.includes(city);
+                  const count = PRODUCTS.filter((product) => BRANDS.some((brand) => brand.slug === product.brandSlug && brand.city === city)).length;
+                  return (
+                    <label key={city} className="flex items-center justify-between text-xs text-zinc-300 hover:text-white cursor-pointer select-none py-1">
+                      <span className="flex items-center gap-2.5">
+                        <input type="checkbox" checked={isChecked} onChange={() => toggleCity(city)} className="w-4 h-4 rounded border-zinc-700 bg-zinc-900 text-cyan-400 focus:ring-0 focus:ring-offset-0 focus:outline-none cursor-pointer accent-cyan-400" />
+                        <span className={isChecked ? 'text-cyan-400 font-semibold' : ''}>{city}</span>
+                      </span>
+                      <span className="text-[11px] font-mono text-zinc-400">{count}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
           </aside>
 
           {/* Product Grid Area */}
@@ -503,15 +539,19 @@ export const CatalogPage: React.FC = () => {
                 <span className="text-zinc-300">До</span>
                 <span className="font-mono text-cyan-400">{maxPrice.toLocaleString('ru-RU')} ₽</span>
               </div>
-              <input
-                type="range"
-                min="3000"
-                max="15000"
-                step="500"
-                value={maxPrice}
-                onChange={(e) => handlePriceChange(Number(e.target.value))}
-                className="w-full accent-cyan-400"
-              />
+              <input type="range" min="3000" max="15000" step="500" value={maxPrice} onChange={(e) => handlePriceChange(Number(e.target.value))} className="w-full accent-cyan-400" />
+            </div>
+            {/* City */}
+            <div>
+              <h4 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-2">Город</h4>
+              <div className="space-y-1.5">
+                {Array.from(new Set(BRANDS.map((brand) => brand.city))).map((city) => (
+                  <label key={city} className="flex items-center gap-2 text-xs text-zinc-300 py-1">
+                    <input type="checkbox" checked={selectedCities.includes(city)} onChange={() => toggleCity(city)} className="accent-cyan-400" />
+                    <span>{city}</span>
+                  </label>
+                ))}
+              </div>
             </div>
 
             <div className="pt-4 border-t border-zinc-800 flex gap-2">
