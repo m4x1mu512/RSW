@@ -5,7 +5,8 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    base: './',
+    // GitHub Pages hosts this project under /RSW/. Keep relative paths locally.
+    base: process.env.GITHUB_ACTIONS === 'true' ? '/RSW/' : './',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {

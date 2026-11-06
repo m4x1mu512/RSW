@@ -38,20 +38,25 @@ export const BrandSubmissionModal: React.FC<BrandSubmissionModalProps> = ({
     setError(null);
 
     try {
-      const res = await fetch('/api/brand-applications', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
+      const storageKey = 'rsw-brand-applications';
+      const savedApplications = JSON.parse(
+        window.localStorage.getItem(storageKey) || '[]'
+      );
 
-      if (!res.ok) {
-        throw new Error('Ошибка при отправке формы');
+      if (!Array.isArray(savedApplications)) {
+        throw new Error('Некорректный формат локальных заявок');
       }
 
+      savedApplications.push({
+        ...formData,
+        id: `app-${Date.now()}`,
+        submittedAt: new Date().toISOString(),
+      });
+
+      window.localStorage.setItem(storageKey, JSON.stringify(savedApplications));
       setSubmitted(true);
     } catch {
-      // In case server route is unavailable or offline, still succeed in UI
-      setSubmitted(true);
+      setError('Не удалось сохранить заявку в этом браузере. Проверьте доступное место и настройки локального хранилища.');
     } finally {
       setLoading(false);
     }
@@ -95,7 +100,7 @@ export const BrandSubmissionModal: React.FC<BrandSubmissionModalProps> = ({
               Заявка принята
             </h3>
             <p className="text-zinc-400 text-sm max-w-sm mx-auto leading-relaxed">
-              Спасибо за заявку! Кураторы Russian Streetwear Club рассмотрят ваши дропы и свяжутся по указанным контактам в течение 24 часов.
+              Заявка сохранена в локальном хранилище этого браузера. Она не отправляется команде клуба автоматически и доступна только на этом устройстве.
             </p>
             <div className="pt-4">
               <button
@@ -271,11 +276,11 @@ export const BrandSubmissionModal: React.FC<BrandSubmissionModalProps> = ({
                   {loading ? (
                     <>
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      <span>Отправка...</span>
+                      <span>Сохранение...</span>
                     </>
                   ) : (
                     <>
-                      <span>Отправить заявку</span>
+                      <span>Сохранить заявку</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </>
                   )}
