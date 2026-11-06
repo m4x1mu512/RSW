@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ArrowUpRight } from 'lucide-react';
 import type { Product } from '../data/streetwearData.ts';
@@ -14,6 +14,7 @@ export const formatPrice = (price: number): string => {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { isFavorite, toggleFavorite } = useFavorites();
+  const [imageFailed, setImageFailed] = useState(false);
   const favorited = isFavorite(product.id);
 
   return (
@@ -21,30 +22,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       {/* Image Container with Hover Zoom */}
       <Link
         to={`/product/${product.id}`}
-        className="relative aspect-[4/3] w-full overflow-hidden bg-zinc-950 block"
+        className={`relative aspect-[4/3] w-full overflow-hidden block ${imageFailed ? 'flex items-center justify-center bg-zinc-900' : 'bg-zinc-950'}`}
       >
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          referrerPolicy="no-referrer"
-          className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
-          onError={(e) => {
-            // Elegant dark fallback if image url is unavailable
-            const target = e.currentTarget;
-            target.style.display = 'none';
-            const parent = target.parentElement;
-            if (parent) {
-              parent.classList.add(
-                'flex',
-                'items-center',
-                'justify-center',
-                'bg-zinc-900',
-                'text-zinc-600'
-              );
-              parent.innerHTML = `<span class="font-display text-sm tracking-wider uppercase font-bold text-zinc-500">${product.brand}</span>`;
-            }
-          }}
-        />
+        {imageFailed ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 px-4">
+            <span className="font-display text-sm tracking-wider uppercase font-bold text-zinc-500">
+              {product.brand}
+            </span>
+          </div>
+        ) : (
+          <img
+            src={product.imageUrl}
+            alt={product.name}
+            referrerPolicy="no-referrer"
+            className="h-full w-full object-cover object-center transition-transform duration-500 ease-out group-hover:scale-105"
+            onError={() => setImageFailed(true)}
+          />
+        )}
 
         {/* Top Floating Badges / Actions */}
         <div className="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">
