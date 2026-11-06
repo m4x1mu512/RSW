@@ -288,7 +288,7 @@ export const CatalogPage: React.FC = () => {
               <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-3">
                 Бренд
               </h3>
-              <div className="max-h-32 overflow-y-auto space-y-2 pr-2">
+              <div className="space-y-2 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
                 {BRANDS.map((brand) => {
                   const count = PRODUCTS.filter((p) => p.brandSlug === brand.slug).length;
                   const isChecked = selectedBrands.includes(brand.slug);
@@ -457,7 +457,7 @@ export const CatalogPage: React.FC = () => {
               <h4 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-2">
                 Бренд
               </h4>
-              <div className="max-h-32 overflow-y-auto space-y-1.5 pr-2">
+              <div className="space-y-1.5 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
                 {BRANDS.map((brand) => (
                   <label
                     key={brand.id}
