@@ -83,6 +83,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBrandModal, theme, onToggl
         {/* Zone 3: 1 primary action */}
         <div className="flex items-center gap-3 shrink-0">
           <button
+            type="button"
+            onClick={onToggleTheme}
+            aria-label={theme === 'dark' ? 'Включить светлую тему' : 'Включить тёмную тему'}
+            aria-pressed={theme === 'light'}
+            title={theme === 'dark' ? 'Светлая тема' : 'Тёмная тема'}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-700 bg-zinc-900 text-zinc-200 transition hover:border-cyan-400 hover:text-cyan-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+          >
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+          <button
             onClick={onOpenBrandModal}
             className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-black bg-cyan-400 hover:bg-cyan-300 active:scale-95 transition-all rounded shadow-[0_0_15px_rgba(34,211,238,0.25)] whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
