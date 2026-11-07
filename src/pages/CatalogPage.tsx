@@ -8,7 +8,7 @@ import {
   ChevronDown,
   Layers
 } from 'lucide-react';
-import { PRODUCTS as STATIC_PRODUCTS, BRANDS as STATIC_BRANDS, CATEGORIES, SIZES, type Product } from '../data/streetwearData.ts';
+import { PRODUCTS as STATIC_PRODUCTS, CATEGORIES, SIZES, type Product } from '../data/streetwearData.ts';
 import { supabase } from '../lib/supabase.ts';
 import { ProductCard } from '../components/ProductCard.tsx';
 
@@ -41,7 +41,7 @@ export const CatalogPage: React.FC = () => {
 
   // Public catalog data is gated by Supabase publication status (RLS also limits
   // anonymous reads to published rows).
-  const [publishedBrandSlugs, setPublishedBrandSlugs] = useState<string[] | null>(null);
+  const [publishedBrands, setPublishedBrands] = useState<{ slug: string; name: string; city: string | null }[] | null>(null);
   const [publishedProductSlugs, setPublishedProductSlugs] = useState<string[] | null>(null);
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [catalogError, setCatalogError] = useState('');
@@ -52,7 +52,7 @@ export const CatalogPage: React.FC = () => {
     const loadPublishedCatalog = async () => {
       try {
         const [brandsResult, productsResult] = await Promise.all([
-          supabase.from('brands').select('slug').eq('status', 'published'),
+          supabase.from('brands').select('slug, name, city').eq('status', 'published'),
           supabase.from('products').select('slug').eq('status', 'published'),
         ]);
 
@@ -62,12 +62,12 @@ export const CatalogPage: React.FC = () => {
           throw brandsResult.error || productsResult.error;
         }
 
-        setPublishedBrandSlugs((brandsResult.data || []).map((brand) => brand.slug));
+        setPublishedBrands((brandsResult.data || []).map((brand) => ({ slug: brand.slug, name: brand.name, city: brand.city })));
         setPublishedProductSlugs((productsResult.data || []).map((product) => product.slug));
       } catch (error) {
         if (!active) return;
         setCatalogError(error instanceof Error ? error.message : 'Не удалось загрузить опубликованный каталог.');
-        setPublishedBrandSlugs([]);
+        setPublishedBrands([]);
         setPublishedProductSlugs([]);
       } finally {
         if (active) setCatalogLoading(false);
@@ -80,15 +80,16 @@ export const CatalogPage: React.FC = () => {
     };
   }, []);
 
-  const catalogBrands = useMemo(
-    () => STATIC_BRANDS.filter((brand) => publishedBrandSlugs?.includes(brand.slug)),
-    [publishedBrandSlugs]
+  const publishedBrandSlugs = useMemo(
+    () => (publishedBrands || []).map((brand) => brand.slug),
+    [publishedBrands]
   );
+  const catalogBrands = publishedBrands || [];
   const catalogProducts = useMemo(
     () => STATIC_PRODUCTS.filter(
       (product) =>
         publishedProductSlugs?.includes(product.id) &&
-        publishedBrandSlugs?.includes(product.brandSlug)
+        publishedBrandSlugs.includes(product.brandSlug)
     ),
     [publishedBrandSlugs, publishedProductSlugs]
   );
@@ -366,7 +367,7 @@ export const CatalogPage: React.FC = () => {
 
                   return (
                     <label
-                      key={brand.id}
+                      key={brand.slug}
                       className="flex items-center justify-between text-xs text-zinc-300 hover:text-white cursor-pointer select-none py-1 group"
                     >
                       <div className="flex items-center gap-2.5">
@@ -557,7 +558,7 @@ export const CatalogPage: React.FC = () => {
               <div className="space-y-1.5 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
                 {catalogBrands.map((brand) => (
                   <label
-                    key={brand.id}
+                    key={brand.slug}
                     className="flex items-center gap-2 text-xs text-zinc-300 py-1"
                   >
                     <input
