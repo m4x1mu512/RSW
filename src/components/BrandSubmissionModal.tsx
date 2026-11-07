@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../lib/supabase.ts';
 import { X, CheckCircle, ArrowRight, Loader2, Sparkles } from 'lucide-react';
 
 interface BrandSubmissionModalProps {
@@ -38,25 +39,17 @@ export const BrandSubmissionModal: React.FC<BrandSubmissionModalProps> = ({
     setError(null);
 
     try {
-      const storageKey = 'rsw-brand-applications';
-      const savedApplications = JSON.parse(
-        window.localStorage.getItem(storageKey) || '[]'
-      );
-
-      if (!Array.isArray(savedApplications)) {
-        throw new Error('Некорректный формат локальных заявок');
-      }
-
-      savedApplications.push({
-        ...formData,
-        id: `app-${Date.now()}`,
-        submittedAt: new Date().toISOString(),
+      const { error: submitError } = await supabase.from('brand_applications').insert({
+        brand_name: formData.brandName.trim(), city: formData.city.trim(),
+        website: formData.website.trim(), telegram: formData.telegram.trim(),
+        contact_name: formData.contactName.trim(), contact_email: formData.contactEmail.trim(),
+        lookbook_url: formData.lookbookUrl.trim(), description: formData.description.trim(),
+        status: 'pending',
       });
-
-      window.localStorage.setItem(storageKey, JSON.stringify(savedApplications));
+      if (submitError) throw submitError;
       setSubmitted(true);
     } catch {
-      setError('Не удалось сохранить заявку в этом браузере. Проверьте доступное место и настройки локального хранилища.');
+      setError('Не удалось отправить заявку. Проверьте соединение и попробуйте ещё раз.');
     } finally {
       setLoading(false);
     }
@@ -100,7 +93,7 @@ export const BrandSubmissionModal: React.FC<BrandSubmissionModalProps> = ({
               Заявка принята
             </h3>
             <p className="text-zinc-400 text-sm max-w-sm mx-auto leading-relaxed">
-              Заявка сохранена в локальном хранилище этого браузера. Она не отправляется команде клуба автоматически и доступна только на этом устройстве.
+              Заявка отправлена команде RSW. Мы рассмотрим её и свяжемся с вами по указанному email.
             </p>
             <div className="pt-4">
               <button
