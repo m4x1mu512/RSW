@@ -442,7 +442,7 @@ export const CatalogPage: React.FC = () => {
             <div>
               <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-3">Город</h3>
               <div className="space-y-2 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
-                {Array.from(new Set(catalogBrands.map((brand) => brand.city))).map((city) => {
+                {Array.from(new Set(catalogBrands.map((brand) => brand.city).filter((city): city is string => Boolean(city)))).map((city) => {
                   const isChecked = selectedCities.includes(city);
                   const count = catalogProducts.filter((product) => catalogBrands.some((brand) => brand.slug === product.brandSlug && brand.city === city)).length;
                   return (
