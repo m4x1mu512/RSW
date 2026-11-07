@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Heart, Menu, X, ArrowUpRight } from 'lucide-react';
+import { Heart, Menu, X, ArrowUpRight, Sun, Moon } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext.tsx';
 
 interface NavbarProps {
   onOpenBrandModal: () => void;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenBrandModal }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenBrandModal, theme, onToggleTheme }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { favorites } = useFavorites();
   const location = useLocation();
@@ -24,7 +26,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenBrandModal }) => {
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#09090b]/90 backdrop-blur-md border-b border-zinc-800/80">
+    <header className="site-header sticky top-0 z-40 bg-[#09090b]/90 backdrop-blur-md border-b border-zinc-800/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-8">
         
         {/* Zone 1: Single text element wordmark */}
