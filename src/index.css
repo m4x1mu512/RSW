@@ -98,3 +98,12 @@ html[data-theme="light"] ::-webkit-scrollbar-thumb {
 html[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
   background: #a1a1aa;
 }
+
+
+/* In light mode, replace explicit white text with near-black.
+   Dark mode remains untouched. */
+html[data-theme="light"] .site-root .text-white,
+html[data-theme="light"] .site-root [class*="text-[#f4f4f5]"],
+html[data-theme="light"] .site-root [class*="text-zinc-50"] {
+  color: #18181b !important;
+}
