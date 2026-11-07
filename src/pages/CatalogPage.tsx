@@ -607,7 +607,7 @@ export const CatalogPage: React.FC = () => {
             <div>
               <h4 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-2">Город</h4>
               <div className="space-y-1.5 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
-                {Array.from(new Set(catalogBrands.map((brand) => brand.city))).map((city) => (
+                {Array.from(new Set(catalogBrands.map((brand) => brand.city).filter((city): city is string => Boolean(city)))).map((city) => (
                   <label key={city} className="flex items-center gap-2 text-xs text-zinc-300 py-1">
                     <input type="checkbox" checked={selectedCities.includes(city)} onChange={() => toggleCity(city)} className="accent-cyan-400" />
                     <span>{city}</span>
