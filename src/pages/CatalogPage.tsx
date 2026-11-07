@@ -8,7 +8,8 @@ import {
   ChevronDown,
   Layers
 } from 'lucide-react';
-import { PRODUCTS, BRANDS, CATEGORIES, SIZES, type Product } from '../data/streetwearData.ts';
+import { PRODUCTS as STATIC_PRODUCTS, CATEGORIES, SIZES, type Product } from '../data/streetwearData.ts';
+import { supabase } from '../lib/supabase.ts';
 import { ProductCard } from '../components/ProductCard.tsx';
 
 const ITEMS_PER_PAGE = 8;
@@ -37,6 +38,64 @@ export const CatalogPage: React.FC = () => {
   const [sortBy, setSortBy] = useState(sortParam);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+
+  // Public catalog data is gated by Supabase publication status.
+  const [publishedBrands, setPublishedBrands] = useState<{ slug: string; name: string; city: string | null }[] | null>(null);
+  const [publishedProductSlugs, setPublishedProductSlugs] = useState<string[] | null>(null);
+  const [catalogLoading, setCatalogLoading] = useState(true);
+  const [catalogError, setCatalogError] = useState('');
+
+  useEffect(() => {
+    let active = true;
+
+    const loadPublishedCatalog = async () => {
+      try {
+        const [brandsResult, productsResult] = await Promise.all([
+          supabase.from('brands').select('slug, name, city').eq('status', 'published'),
+          supabase.from('products').select('slug').eq('status', 'published'),
+        ]);
+
+        if (!active) return;
+
+        if (brandsResult.error || productsResult.error) {
+          throw brandsResult.error || productsResult.error;
+        }
+
+        setPublishedBrands((brandsResult.data || []).map((brand) => ({
+          slug: brand.slug,
+          name: brand.name,
+          city: brand.city,
+        })));
+        setPublishedProductSlugs((productsResult.data || []).map((product) => product.slug));
+      } catch (error) {
+        if (!active) return;
+        setCatalogError(error instanceof Error ? error.message : 'Не удалось загрузить опубликованный каталог.');
+        setPublishedBrands([]);
+        setPublishedProductSlugs([]);
+      } finally {
+        if (active) setCatalogLoading(false);
+      }
+    };
+
+    void loadPublishedCatalog();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const publishedBrandSlugs = useMemo(
+    () => (publishedBrands || []).map((brand) => brand.slug),
+    [publishedBrands]
+  );
+  const catalogBrands = publishedBrands || [];
+  const catalogProducts = useMemo(
+    () => STATIC_catalogProducts.filter(
+      (product) =>
+        publishedProductSlugs?.includes(product.id) &&
+        publishedBrandSlugs.includes(product.brandSlug)
+    ),
+    [publishedBrandSlugs, publishedProductSlugs]
+  );
 
   // Sync state with URL params
   useEffect(() => {
@@ -119,7 +178,7 @@ export const CatalogPage: React.FC = () => {
 
   // Filter and sort items
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((item) => {
+    return catalogProducts.filter((item) => {
       // Category filter
       if (selectedCategory !== 'all' && item.category !== selectedCategory) {
         return false;
@@ -138,7 +197,7 @@ export const CatalogPage: React.FC = () => {
       }
       // City filter (each product inherits its brand's city)
       if (selectedCities.length > 0) {
-        const productCity = BRANDS.find((brand) => brand.slug === item.brandSlug)?.city;
+        const productCity = catalogBrands.find((brand) => brand.slug === item.brandSlug)?.city;
         if (!productCity || !selectedCities.includes(productCity)) return false;
       }
       // Search query
@@ -159,7 +218,7 @@ export const CatalogPage: React.FC = () => {
       if (sortBy === 'newest') return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
       return 0; // default
     });
-  }, [selectedCategory, selectedBrands, selectedSize, maxPrice, selectedCities, searchQuery, sortBy]);
+  }, [catalogProducts, catalogBrands, selectedCategory, selectedBrands, selectedSize, maxPrice, selectedCities, searchQuery, sortBy]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProducts.length;
@@ -277,8 +336,8 @@ export const CatalogPage: React.FC = () => {
                 {CATEGORIES.map((cat) => {
                   const count =
                     cat.id === 'all'
-                      ? PRODUCTS.length
-                      : PRODUCTS.filter((p) => p.category === cat.id).length;
+                      ? catalogProducts.length
+                      : catalogProducts.filter((p) => p.category === cat.id).length;
                   const isSelected = selectedCategory === cat.id;
 
                   return (
@@ -305,13 +364,13 @@ export const CatalogPage: React.FC = () => {
                 Бренд
               </h3>
               <div className="space-y-2 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
-                {BRANDS.map((brand) => {
-                  const count = PRODUCTS.filter((p) => p.brandSlug === brand.slug).length;
+                {catalogBrands.map((brand) => {
+                  const count = catalogProducts.filter((p) => p.brandSlug === brand.slug).length;
                   const isChecked = selectedBrands.includes(brand.slug);
 
                   return (
                     <label
-                      key={brand.id}
+                      key={brand.slug}
                       className="flex items-center justify-between text-xs text-zinc-300 hover:text-white cursor-pointer select-none py-1 group"
                     >
                       <div className="flex items-center gap-2.5">
@@ -386,9 +445,9 @@ export const CatalogPage: React.FC = () => {
             <div>
               <h3 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-3">Город</h3>
               <div className="space-y-2 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
-                {Array.from(new Set(BRANDS.map((brand) => brand.city))).map((city) => {
+                {Array.from(new Set(catalogBrands.map((brand) => brand.city).filter((city): city is string => Boolean(city)))).map((city) => {
                   const isChecked = selectedCities.includes(city);
-                  const count = PRODUCTS.filter((product) => BRANDS.some((brand) => brand.slug === product.brandSlug && brand.city === city)).length;
+                  const count = catalogProducts.filter((product) => catalogBrands.some((brand) => brand.slug === product.brandSlug && brand.city === city)).length;
                   return (
                     <label key={city} className="flex items-center justify-between text-xs text-zinc-300 hover:text-white cursor-pointer select-none py-1">
                       <span className="flex items-center gap-2.5">
@@ -406,7 +465,13 @@ export const CatalogPage: React.FC = () => {
 
           {/* Product Grid Area */}
           <main className="lg:col-span-3">
-            {visibleProducts.length === 0 ? (
+            {catalogLoading ? (
+              <div className="py-20 text-center text-sm text-zinc-400">Загружаем опубликованный каталог…</div>
+            ) : catalogError ? (
+              <div role="alert" className="py-12 text-center rounded-2xl border border-red-900/60 bg-red-950/20 px-4 text-sm text-red-200">
+                Не удалось загрузить каталог. Обновите страницу, чтобы попробовать снова.
+              </div>
+            ) : visibleProducts.length === 0 ? (
               <div className="py-20 text-center bg-zinc-900/30 rounded-2xl border border-zinc-800/80 px-4">
                 <h3 className="text-lg font-display font-bold text-white mb-2">
                   Ничего не найдено
@@ -494,9 +559,9 @@ export const CatalogPage: React.FC = () => {
                 Бренд
               </h4>
               <div className="space-y-1.5 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
-                {BRANDS.map((brand) => (
+                {catalogBrands.map((brand) => (
                   <label
-                    key={brand.id}
+                    key={brand.slug}
                     className="flex items-center gap-2 text-xs text-zinc-300 py-1"
                   >
                     <input
@@ -545,7 +610,7 @@ export const CatalogPage: React.FC = () => {
             <div>
               <h4 className="text-xs uppercase font-mono font-bold tracking-wider text-zinc-300 mb-2">Город</h4>
               <div className="space-y-1.5 pr-2" style={{ height: '120px', overflowY: 'auto' }}>
-                {Array.from(new Set(BRANDS.map((brand) => brand.city))).map((city) => (
+                {Array.from(new Set(catalogBrands.map((brand) => brand.city).filter((city): city is string => Boolean(city)))).map((city) => (
                   <label key={city} className="flex items-center gap-2 text-xs text-zinc-300 py-1">
                     <input type="checkbox" checked={selectedCities.includes(city)} onChange={() => toggleCity(city)} className="accent-cyan-400" />
                     <span>{city}</span>
