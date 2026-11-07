@@ -112,7 +112,7 @@ export const BrandsPage: React.FC<BrandsPageProps> = ({ onOpenBrandModal }) => {
                   to={`/brand/${brand.slug}`}
                   className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold text-white bg-zinc-800 hover:bg-zinc-700 group-hover:bg-cyan-400 group-hover:text-black transition-all"
                 >
-                  <span>Смотреть товары</span>
+                  <span>О бренде</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
