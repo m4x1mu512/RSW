@@ -89,7 +89,7 @@ export const CatalogPage: React.FC = () => {
   );
   const catalogBrands = publishedBrands || [];
   const catalogProducts = useMemo(
-    () => STATIC_catalogProducts.filter(
+    () => STATIC_PRODUCTS.filter(
       (product) =>
         publishedProductSlugs?.includes(product.id) &&
         publishedBrandSlugs.includes(product.brandSlug)
